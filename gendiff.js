@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { program } from 'commander';
 
 program
@@ -12,5 +14,3 @@ program
   });
 
 program.parse(process.argv);
-
-export default program;
