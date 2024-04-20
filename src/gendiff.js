@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
+import { parseData } from './parsers.js';
 
 export const gendiff = (filepath1, filepath2) => {
     const fileData1 = fs.readFileSync(path.resolve(process.cwd(), filepath1), 'utf-8');
@@ -12,13 +13,6 @@ export const gendiff = (filepath1, filepath2) => {
     const diff = generateDiff(parsedData1, parsedData2);
     const formattedDiff = formatDiff(diff);
     console.log(formattedDiff);
-  };
-  
-  const parseData = (data, extension) => {
-    if (extension === '.json') {
-      return JSON.parse(data);
-    }
-    throw new Error('Unsupported file format');
   };
   
   const generateDiff = (data1, data2) => {
@@ -43,7 +37,7 @@ export const gendiff = (filepath1, filepath2) => {
       }
   
       return buildDiffItem(key, value2, '+');
-    });
+    });e
   };
   
   const formatDiff = (diff) => {
