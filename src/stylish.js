@@ -1,28 +1,27 @@
-const formatDiff = (diff, depth = 1) => {
-    if (!diff) {
-        return '';
-    }
-      
-    const indentSize = 4;
-    const indent = ' '.repeat((depth - 1) * indentSize);
-      
-    const stylishFormat = diff.map(({ key, value, status, children }) => {
-        const formattedValue = value instanceof Object ? formatDiff(children, depth + 1) : value;
-        const formattedKey = `${indent}  ${key}: ${formattedValue}`;
-          
-        switch (status) {
-            case '+':
-                return `${indent}+ ${formattedKey}`;
-            case '-':
-                return `${indent}- ${formattedKey}`;
-            case ' ':
-                return `${indent}  ${formattedKey}`;
-            default:
-                throw new Error('Unknown status');
-        }
-    });
+import _ from 'lodash';
 
-    return `{${'\n'}${stylishFormat.join('\n')}\n${' '.repeat((depth - 1) * indentSize)}}`;
-};
-  
-export default formatDiff;
+const formatDiff = (diff, depth = 1) => { 
+    if (!_.isObject(diff)) { 
+      return `${diff}`; 
+    } 
+   
+    const indentSize = 4; 
+    const indent = ' '.repeat(indentSize * depth); 
+    const bracketIndent = ' '.repeat(indentSize * (depth - 1)); 
+   
+    const lines = Object.entries(diff).flatMap(([key, value]) => { 
+      if (_.isObject(value)) { 
+        return [ 
+          `${indent}  ${key}: {`, 
+          `${formatDiff(value, depth + 1)}`, 
+          `${bracketIndent}  }`, 
+        ]; 
+      } 
+   
+      return `${indent}  ${key}: ${value}`; 
+    }); 
+   
+    return `{\n${lines.join('\n')}\n${bracketIndent}}`; 
+  }; 
+   
+  export default formatDiff; 
