@@ -1,30 +1,37 @@
 import _ from 'lodash';
 
-  const formatDiff = (diff, depth = 1) => {
-    if (!_.isObject(diff)) {
-        return `${diff}`;
-    }
-
-    const indentSize = 2; // количество отступов для каждого уровня вложенности
-    const indentChar = '.'; // символ для формирования отступов
-    const specialChar = '+'; // специальный символ
-    const indent = `${indentChar.repeat(indentSize * depth)}`; // формирование отступа
-    const bracketIndent = `${indentChar.repeat(indentSize * (depth - 1))}`; // отступ для закрывающей скобки
-
-    const lines = Object.entries(diff).flatMap(([key, value]) => {
-        if (_.isObject(value)) {
-            return [
-                `${indent}${key}: {`,
-                `${formatDiff(value, depth + 1)}`,
-                `${bracketIndent}}`,
-            ];
-        }
-
-        const special = depth > 1 ? `${specialChar} ` : ''; // проверка на специальный символ
-        return `${indent}${special}${key}: ${value}`;
-    });
-
-    return `{\n${lines.join('\n')}\n${bracketIndent}}`;
+const formatValue = (value, depth) => {
+  if (_.isObject(value)) {
+    const indentSize = 4;
+    const indentStr = ' '.repeat(indentSize * depth);
+    const entries = Object.entries(value);
+    const formattedEntries = entries.map(([key, val]) => `${indentStr}  ${key}: ${formatValue(val, depth + 1)}`);
+    return `{\n${formattedEntries.join('\n')}\n${indentStr}}`;
+  }
+  return value;
 };
 
-export default formatDiff; 
+const formatDiff = (diff, depth = 1) => {
+  const indentSize = 4;
+  const indentStr = ' '.repeat(indentSize * depth);
+  const entries = Object.entries(diff);
+  const formattedEntries = entries.map(([key, { status, value, value1, value2, children }]) => {
+    switch (status) {
+      case 'added':
+        return `${indentStr}+ ${key}: ${formatValue(value, depth)}`;
+      case 'removed':
+        return `${indentStr}- ${key}: ${formatValue(value, depth)}`;
+      case 'updated':
+        return [`${indentStr}- ${key}: ${formatValue(value1, depth)}`, `${indentStr}+ ${key}: ${formatValue(value2, depth)}`];
+      case 'nested':
+        return `${indentStr}  ${key}: ${formatDiff(children, depth + 1)}`;
+      case 'unchanged':
+        return `${indentStr}  ${key}: ${formatValue(value, depth)}`;
+      default:
+        throw new Error(`Unknown status: ${status}`);
+    }
+  }).flat();
+  return `{\n${formattedEntries.join('\n')}\n${indentStr.slice(0, -2)}}`;
+};
+
+export default formatDiff;
