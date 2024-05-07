@@ -14,7 +14,7 @@ const formatValue = (value, depth) => {
 const formatDiff = (diff, depth = 1) => {
   const keys = Object.keys(diff).sort();
   const indentSize = 4;
-  const indentStr = ' '.repeat(indentSize * depth);
+  const indentStr = ''.repeat(indentSize * depth);
   const formattedEntries = keys.map((key) => {
     const {
       status, value, value1, value2, children,
