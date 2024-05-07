@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 
-export const parseData = (data, extension) => {
+export default function parseData(data, extension) {
   if (extension === '.json') {
     return JSON.parse(data);
   }
@@ -8,4 +8,4 @@ export const parseData = (data, extension) => {
     return yaml.load(data);
   }
   throw new Error('Unsupported file format');
-};
+}

@@ -8,8 +8,11 @@ const formatValue = (value) => {
 };
 
 const formatDiff = (diff, path = '') => {
-  const entries = Object.entries(diff).flatMap(([key, { status, value, value1, value2, children }]) => {
-  const currentPath = path ? `${path}.${key}` : key;
+  const entries = Object.entries(diff).flatMap(([key, {
+    status, value, value1, value2, children,
+  },
+  ]) => {
+    const currentPath = path ? `${path}.${key}` : key;
 
     switch (status) {
       case 'added':

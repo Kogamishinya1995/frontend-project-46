@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { parseData } from './parsers.js';
+import parseData from './parsers/index.js';
 import formatters from '../formaters/index.js';
 import generateDiff from './diffGenerator.js';
 
-export const gendiff = (filepath1, filepath2, format = 'stylish') => {
+export default function gendiff(filepath1, filepath2, format = 'stylish') {
   const fileData1 = fs.readFileSync(path.resolve(process.cwd(), filepath1), 'utf-8');
   const fileData2 = fs.readFileSync(path.resolve(process.cwd(), filepath2), 'utf-8');
   const parsedData1 = parseData(fileData1, path.extname(filepath1));
@@ -13,4 +13,5 @@ export const gendiff = (filepath1, filepath2, format = 'stylish') => {
   const formatter = formatters[format];
   const formattedDiff = formatter(diff);
   console.log(formattedDiff);
-};
+  return formattedDiff;
+}

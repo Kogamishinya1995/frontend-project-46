@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    jest: true,
   },
   extends: [
     'airbnb-base',
@@ -28,5 +29,6 @@ module.exports = {
     'vue',
   ],
   rules: {
+    'import/extensions': 0,
   },
 };
