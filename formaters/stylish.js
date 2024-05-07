@@ -4,7 +4,7 @@ const formatValue = (value, depth) => {
   if (_.isObject(value)) {
     const keys = Object.keys(value).sort();
     const indentSize = 4;
-    const indentStr = ' '.repeat(indentSize * depth);
+    const indentStr = ''.repeat(indentSize * depth);
     const formattedEntries = keys.map((key) => `${indentStr}  ${key}: ${formatValue(value[key], depth + 1)}`);
     return `{\n${formattedEntries.join('\n')}\n${indentStr}}`;
   }
