@@ -34,7 +34,7 @@ const formatDiff = (diff, depth = 1) => {
         throw new Error(`Unknown status: ${status}`);
     }
   }).flat();
-  return `{\n${formattedEntries.join('\n')}\n}`;
+  return `{\n${formattedEntries.join('\n')}\n${indentStr}}`;
 };
 
 export default formatDiff;
