@@ -6,7 +6,7 @@ const formatValue = (value, depth) => {
     const indentSize = 4;
     const indentStr = ' '.repeat(indentSize * depth - 2);
     const formattedEntries = keys.map((key) => `${indentStr}  ${key}: ${formatValue(value[key], depth + 1)}`);
-    return `{\n${formattedEntries.join('\n')}\n${indentStr}  }`;
+    return `{\n${formattedEntries.join('\n')}\n${indentStr.slice(0, -2)}}`;
   }
   return value;
 };
@@ -34,7 +34,7 @@ const formatDiff = (diff, depth = 1) => {
         throw new Error(`Unknown status: ${status}`);
     }
   }).flat();
-  return `{\n${formattedEntries.join('\n')}\n${indentStr}  }`;
+  return `{\n${formattedEntries.join('\n')}\n${indentStr.slice(0, -2)}}`;
 };
 
 export default formatDiff;
