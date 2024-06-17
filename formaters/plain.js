@@ -19,6 +19,10 @@ const formatDiff = (diff, path = '') => {
         case 'removed':
           return [`Property '${currentPath}' was removed`];
         case 'updated':
+          if (_.isObject(value1) && _.isObject(value2)) {
+            const nestedDiff = formatDiff(children, currentPath);
+            return nestedDiff.length > 0 ? nestedDiff : [];
+          }
           return [`Property '${currentPath}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`];
         case 'nested':
           const nestedDiff = formatDiff(children, currentPath);
