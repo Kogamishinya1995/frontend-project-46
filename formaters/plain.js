@@ -11,9 +11,9 @@ const formatValue = (value) => {
 };
 
 const formatDiff = (diff, path = '') => {
-  const entries = Array.from(Object.entries(diff))
-    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-    .flatMap(([key, { status, value, value1, value2, children }]) => {
+  const entries = [...Object.entries(diff)]
+  .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+  .flatMap(([key, { status, value, value1, value2, children }]) => {
       const currentPath = path ? `${path}.${key}` : key;
       switch (status) {
         case 'added':
