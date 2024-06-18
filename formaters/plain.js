@@ -11,9 +11,9 @@ const formatValue = (value) => {
 };
 
 const formatDiff = (diff, path = '') => {
-  const entries = Object.entries(diff)
-    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-    .flatMap(([key, {
+  const sortedEntries = [...Object.entries(diff)] 
+  .sort(([keyA], [keyB]) => keyA.localeCompare(keyB)) 
+  .flatMap(([key, {
       status, value, value1, value2, children,
     }]) => {
       const currentPath = path ? `${path}.${key}` : key;
@@ -33,7 +33,7 @@ const formatDiff = (diff, path = '') => {
           throw new Error(`Unknown status: ${status}`);
       }
     });
-  return entries.join('\n');
+  return sortedEntries.join('\n');
 };
 
 export default formatDiff;
