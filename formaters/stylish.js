@@ -16,7 +16,9 @@ const formatDiff = (diff, depth = 1) => {
   const indentSize = 4;
   const indentStr = ' '.repeat(indentSize * depth - 2);
   const formattedEntries = keys.map((key) => {
-    const { status, value, value1, value2, children } = diff[key];
+    const {
+      status, value, value1, value2, children,
+    } = diff[key];
     switch (status) {
       case 'added':
         return `${indentStr}+ ${key}: ${formatValue(value, depth + 1)}`;
