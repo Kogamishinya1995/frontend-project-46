@@ -16,28 +16,22 @@ const formatDiff = (diff, path = '') => {
       status, value, value1, value2, children,
     }]) => {
       const currentPath = path ? `${path}.${key}` : key;
-      let result;
       switch (status) {
         case 'added':
-          result = `Property '${currentPath}' was added with value: ${formatValue(value)}`;
-          break;
+          return `Property '${currentPath}' was added with value: ${formatValue(value)}`;
         case 'removed':
-          result = `Property '${currentPath}' was removed`;
-          break;
+          return `Property '${currentPath}' was removed`;
         case 'updated':
-          result = `Property '${currentPath}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`;
-          break;
-        case 'nested':
+          return `Property '${currentPath}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`;
+        case 'nested': {
           const nestedDiff = formatDiff(children, currentPath);
-          result = nestedDiff.length > 0 ? nestedDiff : [];
-          break;
+          return nestedDiff.length > 0 ? nestedDiff : [];
+        }
         case 'unchanged':
-          result = [];
-          break;
+          return [];
         default:
           throw new Error(`Unknown status: ${status}`);
       }
-      return result;
     });
   return entries.join('\n');
 };
