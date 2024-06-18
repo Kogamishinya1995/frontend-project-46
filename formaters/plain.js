@@ -11,29 +11,35 @@ const formatValue = (value) => {
 };
 
 const formatDiff = (diff, path = '') => {
-  const sortedEntries = [...Object.entries(diff)] 
-  .sort(([keyA], [keyB]) => keyA.localeCompare(keyB)) 
-  .flatMap(([key, {
+  const entries = _.sortBy(Object.entries(diff), ([key]) => key)
+    .flatMap(([key, {
       status, value, value1, value2, children,
     }]) => {
       const currentPath = path ? `${path}.${key}` : key;
+      let result;
       switch (status) {
         case 'added':
-          return `Property '${currentPath}' was added with value: ${formatValue(value)}`;
+          result = `Property '${currentPath}' was added with value: ${formatValue(value)}`;
+          break;
         case 'removed':
-          return `Property '${currentPath}' was removed`;
+          result = `Property '${currentPath}' was removed`;
+          break;
         case 'updated':
-          return `Property '${currentPath}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`;
+          result = `Property '${currentPath}' was updated. From ${formatValue(value1)} to ${formatValue(value2)}`;
+          break;
         case 'nested':
           const nestedDiff = formatDiff(children, currentPath);
-          return nestedDiff.length > 0 ? nestedDiff : [];
+          result = nestedDiff.length > 0 ? nestedDiff : [];
+          break;
         case 'unchanged':
-          return [];
+          result = [];
+          break;
         default:
           throw new Error(`Unknown status: ${status}`);
       }
+      return result;
     });
-  return sortedEntries.join('\n');
+  return entries.join('\n');
 };
 
 export default formatDiff;
