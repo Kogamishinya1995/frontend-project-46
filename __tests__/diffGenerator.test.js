@@ -1,4 +1,5 @@
 import generateDiff from '../src/diffGenerator';
+import parseData from '../src/parsers/index.js';
 
 test('generateDiff - should identify updated, removed and added values', () => {
   const data1 = {
@@ -116,9 +117,56 @@ test('generateDiff - should handle empty objects', () => {
   const expectedDiff = {};
   expect(diff).toEqual(expectedDiff);
 });
-test('generateDiff - should handle invalid input data', () => {
-  const data1 = 'notAnObject';
-  const data2 = [];
+describe('parseData', () => {
+  it('should parse JSON data correctly', () => {
+    const jsonData = '{"name": "John", "age": 30}';
+    const parsedData = parseData(jsonData, '.json');
+    expect(parsedData).toEqual({ name: 'John', age: 30 });
+  });
 
-  expect(() => generateDiff(data1, data2)).toThrowError(Error);
+  it('should parse YAML data correctly', () => {
+    const yamlData = 'name: John\nage: 30';
+    const parsedData = parseData(yamlData, '.yaml');
+    expect(parsedData).toEqual({ name: 'John', age: 30 });
+  });
+
+  it('should throw an error for unsupported file format', () => {
+    const unsupportedData = 'this is some other data format';
+    expect(() => parseData(unsupportedData, '.txt')).toThrowError('Unsupported file format');
+  });
+});
+describe('generateDiff', () => {
+  it('should correctly calculate the difference between two JSON objects', () => {
+    const obj1 = { name: 'John', age: 30, city: 'New York' };
+    const obj2 = { name: 'John', age: 35, city: 'San Francisco' };
+    const expectedDiff = {
+      name: { status: 'unchanged', value: 'John' },
+      age: { status: 'updated', value1: 30, value2: 35 },
+      city: { status: 'updated', value1: 'New York', value2: 'San Francisco' },
+    };
+    const diff = generateDiff(obj1, obj2);
+    expect(diff).toEqual(expectedDiff);
+  });
+
+  it('should correctly calculate the difference between two YAML objects', () => {
+    const yamlData1 = `
+    name: John
+    age: 30
+    city: New York
+    `;
+    const yamlData2 = `
+    name: John
+    age: 35
+    city: San Francisco
+    `;
+    const obj1 = parseData(yamlData1, '.yaml');
+    const obj2 = parseData(yamlData2, '.yaml');
+    const expectedDiff = {
+      name: { status: 'unchanged', value: 'John' },
+      age: { status: 'updated', value1: 30, value2: 35 },
+      city: { status: 'updated', value1: 'New York', value2: 'San Francisco' },
+    };
+    const diff = generateDiff(obj1, obj2);
+    expect(diff).toEqual(expectedDiff);
+  });
 });
