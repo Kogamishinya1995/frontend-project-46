@@ -1,4 +1,4 @@
-import generateDiff from '../src/diffGenerator';
+import calculateDiff from '../src/diffGenerator';
 import parseData from '../src/parsers/index.js';
 
 test('generateDiff - should identify updated, removed and added values', () => {
@@ -12,7 +12,7 @@ test('generateDiff - should identify updated, removed and added values', () => {
     key2: 456,
     key4: 'value4',
   };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'unchanged', value: 'value1' },
     key2: { status: 'updated', value1: 123, value2: 456 },
@@ -24,7 +24,7 @@ test('generateDiff - should identify updated, removed and added values', () => {
 test('generateDiff - should handle flat objects with the same keys', () => {
   const data1 = { key1: 'value1', key2: 'value2' };
   const data2 = { key1: 'value1', key2: 'value2_updated' };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'unchanged', value: 'value1' },
     key2: { status: 'updated', value1: 'value2', value2: 'value2_updated' },
@@ -46,7 +46,7 @@ test('generateDiff - should handle nested objects', () => {
       nestedKey3: 'nestedValue3',
     },
   };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'unchanged', value: 'value1' },
     key2: {
@@ -69,7 +69,7 @@ test('generateDiff - should handle when one of the objects is null', () => {
     key1: 'value1',
     key2: 'value2',
   };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'unchanged', value: 'value1' },
     key2: { status: 'updated', value1: null, value2: 'value2' },
@@ -79,7 +79,7 @@ test('generateDiff - should handle when one of the objects is null', () => {
 test('generateDiff - should handle numbers', () => {
   const data1 = { key1: 123, key2: 0, key3: -123 };
   const data2 = { key1: 456, key2: 0, key3: -456 };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'updated', value1: 123, value2: 456 },
     key2: { status: 'unchanged', value: 0 },
@@ -91,7 +91,7 @@ test('generateDiff - should handle numbers', () => {
 test('generateDiff - should handle strings', () => {
   const data1 = { key1: 'hello', key2: ' ', key3: '!@#$%' };
   const data2 = { key1: 'world', key2: '\t', key3: '' };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'updated', value1: 'hello', value2: 'world' },
     key2: { status: 'updated', value1: ' ', value2: '\t' },
@@ -103,7 +103,7 @@ test('generateDiff - should handle strings', () => {
 test('generateDiff - should handle boolean values', () => {
   const data1 = { key1: true, key2: false };
   const data2 = { key1: false, key2: true };
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {
     key1: { status: 'updated', value1: true, value2: false },
     key2: { status: 'updated', value1: false, value2: true },
@@ -113,7 +113,7 @@ test('generateDiff - should handle boolean values', () => {
 test('generateDiff - should handle empty objects', () => {
   const data1 = {};
   const data2 = {};
-  const diff = generateDiff(data1, data2);
+  const diff = calculateDiff(data1, data2);
   const expectedDiff = {};
   expect(diff).toEqual(expectedDiff);
 });
@@ -144,7 +144,7 @@ describe('generateDiff', () => {
       age: { status: 'updated', value1: 30, value2: 35 },
       city: { status: 'updated', value1: 'New York', value2: 'San Francisco' },
     };
-    const diff = generateDiff(obj1, obj2);
+    const diff = calculateDiff(obj1, obj2);
     expect(diff).toEqual(expectedDiff);
   });
 
@@ -166,7 +166,7 @@ describe('generateDiff', () => {
       age: { status: 'updated', value1: 30, value2: 35 },
       city: { status: 'updated', value1: 'New York', value2: 'San Francisco' },
     };
-    const diff = generateDiff(obj1, obj2);
+    const diff = calculateDiff(obj1, obj2);
     expect(diff).toEqual(expectedDiff);
   });
 });
