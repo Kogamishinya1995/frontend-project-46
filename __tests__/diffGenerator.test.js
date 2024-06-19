@@ -119,10 +119,6 @@ test('generateDiff - should handle empty objects', () => {
 test('generateDiff - should handle invalid input data', () => {
   const data1 = 'notAnObject';
   const data2 = [];
-  try {
-    generateDiff(data1, data2);
-  } catch (error) {
-    expect(error).toBeInstanceOf(Error);
-  }
-});
 
+  expect(() => generateDiff(data1, data2)).toThrowError(Error);
+});
