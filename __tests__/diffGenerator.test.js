@@ -109,3 +109,20 @@ test('generateDiff - should handle boolean values', () => {
   };
   expect(diff).toEqual(expectedDiff);
 });
+test('generateDiff - should handle empty objects', () => {
+  const data1 = {};
+  const data2 = {};
+  const diff = generateDiff(data1, data2);
+  const expectedDiff = {};
+  expect(diff).toEqual(expectedDiff);
+});
+test('generateDiff - should handle invalid input data', () => {
+  const data1 = 'notAnObject';
+  const data2 = [];
+  try {
+    generateDiff(data1, data2);
+  } catch (error) {
+    expect(error).toBeInstanceOf(Error);
+  }
+});
+
