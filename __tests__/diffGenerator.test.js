@@ -132,7 +132,7 @@ describe('parseData', () => {
 
   it('should throw an error for unsupported file format', () => {
     const unsupportedData = 'this is some other data format';
-    expect(() => parseData(unsupportedData, '.txt')).toThrowError('Unsupported file format');
+    expect(() => parseData(unsupportedData, '.txt')).toThrow('Unsupported file format');
   });
 });
 describe('generateDiff', () => {
