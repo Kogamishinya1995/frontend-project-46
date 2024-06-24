@@ -1,5 +1,15 @@
 import _ from 'lodash';
 
+const makeNode = (props) => {
+  return {
+    name: props.key,
+    type: props.status,
+    value: props.value,
+    newValue: props.newValue,
+    children: props.children
+  };
+} 
+
 const calculateDiff = (data1, data2) => {
   const keys = _.union(Object.keys(data1), Object.keys(data2));
 
