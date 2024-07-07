@@ -24,7 +24,10 @@ const formatDiff = (diff, depth = 1) => {
       case 'removed':
         return `${indentStr}- ${key}: ${formatValue(value, depth + 1)}`;
       case 'updated':
-        return [`${indentStr}- ${key}: ${formatValue(value, depth + 1)}`, `${indentStr}+ ${key}: ${formatValue(value2, depth + 1)}`];
+        return [
+          `${indentStr}- ${key}: ${formatValue(value, depth + 1)}`,
+          `${indentStr}+ ${key}: ${formatValue(value2, depth + 1)}`,
+        ];
       case 'nested':
         return `${indentStr}  ${key}: ${formatDiff(children, depth + 1)}`;
       case 'unchanged':
