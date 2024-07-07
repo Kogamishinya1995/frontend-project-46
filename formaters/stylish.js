@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 const formatValue = (value, depth) => {
   if (_.isObject(value)) {
     const keys = _.sortBy(Object.keys(value));
