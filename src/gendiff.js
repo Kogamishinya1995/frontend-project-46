@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import parseData from './parsers/index.js';
 import formatters from '../formaters/index.js';
-import calculateDiff from './diffGenerator.js';
+import calculateDiff from './calculateDiff.js';
 
 export default function gendiff(filepath1, filepath2, format = 'stylish') {
   const fileData1 = fs.readFileSync(path.resolve(process.cwd(), filepath1), 'utf-8');
